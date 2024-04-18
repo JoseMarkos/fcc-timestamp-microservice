@@ -36,9 +36,22 @@ var listener = app.listen(process.env.PORT || 3000, function () {
 // api timestamp
 app.get("/api/:dateinput", function(req, res) {
   let dateinput = new Date(req.params.dateinput);
+  console.log(req.params.dateinput);
+  
+  console.log(dateinput.toString(), 'joder');
   if ("Invalid Date" == dateinput) {
-    return res.json({ error : "Invalid Date" , paramss: req.params});
+    const time = parseInt(req.params.dateinput);
+    if (isNaN(time)) {
+      return res.json({ error : "Invalid Date" });
+    }
+    dateinput = new Date(time);
   }
+    
+  return res.json({ unix: dateinput.getTime(), utc: dateinput.toUTCString() });
+});
+
+app.get("/api/", function(req, res) {
+  let dateinput = new Date();
     
   return res.json({ unix: dateinput.getTime(), utc: dateinput.toUTCString() });
 });
